@@ -2,4 +2,11 @@
 <resources>
     <string name="app_name">Wambal</string>
     <string name="app_title">Wambal - Budgeting made easy</string>
+    <string name="create_budget_category_prompt">Please choose a Category</string>
+    <string-array name="budget_categories">
+        <item>Groceries</item>
+        <item>Shopping</item>
+        <item>Computers</item>
+        <item>Travel</item>
+    </string-array>
 </resources>

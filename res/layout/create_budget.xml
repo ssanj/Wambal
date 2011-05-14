@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    <LinearLayout
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:orientation="vertical"
+                  android:padding="5dip">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_budget_category_prompt" />
+        <Spinner
+                android:id="@+id/budgetCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:prompt="@string/create_budget_category_prompt"
+                />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Name" />
+        <EditText
+            android:id="@+id/budgetName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Budget" />
+        <EditText
+            android:id="@+id/budgetCost"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:numeric="decimal"
+
+                />
+        <CheckBox
+            android:id="@+id/saveBudget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+        <Button
+                android:id="@+id/saveBudgetButton"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Budget" />
+    </LinearLayout>
+</ScrollView>

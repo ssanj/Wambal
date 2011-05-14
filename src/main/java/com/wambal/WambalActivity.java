@@ -1,11 +1,11 @@
 package com.wambal;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 public class WambalActivity extends Activity {
 
@@ -19,7 +19,8 @@ public class WambalActivity extends Activity {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(final AdapterView<?> adapterView, final View view, final int position, final long index) {
-                Toast.makeText(WambalActivity.this, "" + adapterView.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(WambalActivity.this, CreateBudgetActivity.class);
+                startActivity(intent);
             }
         });
     }
