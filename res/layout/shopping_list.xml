@@ -3,74 +3,82 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:stretchColumns="1">
-
+    <TableRow android:background="#ff0000ff">
+        <TextView  android:text="Groceries" android:gravity="left" android:padding="3dip"/>
+    </TableRow>
     <TableRow>
         <TextView
-            android:layout_column="1"
-            android:text="Open..."
+            android:layout_column="0"
+            android:text="Item"
+            android:gravity="left"
             android:padding="3dip" />
         <TextView
-            android:text="Ctrl-O"
+            android:layout_column="1"
+            android:text="Qty"
+            android:gravity="center_horizontal"
+            android:padding="3dip" />
+        <TextView
+            android:layout_column="2"
+            android:text="Cost"
             android:gravity="right"
             android:padding="3dip" />
     </TableRow>
-
-    <TableRow>
-        <TextView
-            android:layout_column="1"
-            android:text="Save..."
-            android:padding="3dip" />
-        <TextView
-            android:text="Ctrl-S"
-            android:gravity="right"
-            android:padding="3dip" />
-    </TableRow>
-
-    <TableRow>
-        <TextView
-            android:layout_column="1"
-            android:text="Save As..."
-            android:padding="3dip" />
-        <TextView
-            android:text="Ctrl-Shift-S"
-            android:gravity="right"
-            android:padding="3dip" />
-    </TableRow>
-
     <View
-        android:layout_height="2dip"
-        android:background="#FF909090" />
-
+    android:layout_height="2dip"
+    android:background="#FF909090" />
     <TableRow>
         <TextView
-            android:text="X"
+            android:layout_column="0"
+            android:text="Milk"
+            android:gravity="left"
             android:padding="3dip" />
         <TextView
-            android:text="Import..."
-            android:padding="3dip" />
-    </TableRow>
-
-    <TableRow>
-        <TextView
-            android:text="X"
+            android:layout_column="1"
+            android:text="1"
+            android:gravity="center_horizontal"
             android:padding="3dip" />
         <TextView
-            android:text="Export..."
-            android:padding="3dip" />
-        <TextView
-            android:text="Ctrl-E"
+            android:layout_column="2"
+            android:text="$2.50"
             android:gravity="right"
             android:padding="3dip" />
     </TableRow>
-
-    <View
-        android:layout_height="2dip"
-        android:background="#FF909090" />
-
     <TableRow>
         <TextView
-            android:layout_column="1"
-            android:text="Quit"
+            android:layout_column="0"
+            android:text="Ham"
+            android:gravity="left"
             android:padding="3dip" />
+        <TextView
+            android:layout_column="1"
+            android:text="1"
+            android:gravity="center_horizontal"
+            android:padding="3dip" />
+        <TextView
+            android:layout_column="2"
+            android:text="$4.50"
+            android:gravity="right"
+            android:padding="3dip" />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_column="0"
+            android:text="Bread"
+            android:gravity="left"
+            android:padding="3dip" />
+        <TextView
+            android:layout_column="1"
+            android:text="1"
+            android:gravity="center_horizontal"
+            android:padding="3dip" />
+        <TextView
+            android:layout_column="2"
+            android:text="1.99"
+            android:gravity="right"
+            android:padding="3dip" />
+    </TableRow>
+    <TableRow android:background="#ff00ff00">
+        <TextView android:text="Total" android:layout_column="0" android:layout_span="2" android:gravity="left" android:padding="3dip" />
+        <TextView android:text="8.99" android:layout_column="2" android:gravity="right" android:padding="3dip" />
     </TableRow>
 </TableLayout>
