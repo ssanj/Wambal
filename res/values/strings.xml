@@ -3,6 +3,8 @@
     <string name="app_name">Wambal</string>
     <string name="app_title">Wambal - Budgeting made easy</string>
     <string name="create_budget_category_prompt">Please choose a Category</string>
+    <string name="add_item">Add Item</string>
+    <string name="delete_item">Delete Item</string>
     <string-array name="budget_categories">
         <item>Groceries</item>
         <item>Shopping</item>
