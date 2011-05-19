@@ -5,6 +5,7 @@
 package com.wambal;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -65,6 +66,8 @@ public final class CreateBudgetActivity extends Activity {
                 createdBudget.save = saveBudget.isChecked();
 
                 Toast.makeText(CreateBudgetActivity.this, createdBudget.toString(), Toast.LENGTH_LONG).show();
+
+                startActivity(new Intent(CreateBudgetActivity.this, ShoppingListActivity.class));
             }
         });
     }

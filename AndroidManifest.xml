@@ -3,7 +3,9 @@
       package="com.wambal"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:label="Wambal" android:icon="@drawable/icon">
+    <uses-sdk android:minSdkVersion="8" />
+    <application android:label="Wambal" android:icon="@drawable/icon"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity android:name=".WambalActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -12,5 +14,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateBudgetActivity" android:label="Create Budget" />
+        <activity android:name=".ShoppingListActivity" android:label="Shopping List" />
     </application>
 </manifest>
