@@ -5,6 +5,10 @@
     <string name="create_budget_category_prompt">Please choose a Category</string>
     <string name="add_item">Add Item</string>
     <string name="delete_item">Delete Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_qty">Quantity</string>
+    <string name="save_settings">Save</string>
+    <string name="add_button_text">Add</string>
     <string-array name="budget_categories">
         <item>Groceries</item>
         <item>Shopping</item>

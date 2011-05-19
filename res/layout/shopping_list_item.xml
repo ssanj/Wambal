@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    <LinearLayout
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:orientation="vertical">
+
+        <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_name" />
+        <AutoCompleteTextView android:id="@+id/shopping_list_item_actv" android:layout_height="wrap_content" android:layout_width="fill_parent" />
+        <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_qty" />
+        <EditText android:id="@+id/shopping_list_item_qty_editText" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="number" />
+        <CheckBox
+            android:id="@+id/saveBudget"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_settings" />
+        <Button android:id="@+id/shopping_list_item_add_button" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/add_button_text" />
+    </LinearLayout>
+</ScrollView>
