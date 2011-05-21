@@ -33,6 +33,11 @@ public final class ShoppingListActivity extends Activity {
         }
     }
 
+    @Override protected void onNewIntent(final Intent intent) {
+        super.onNewIntent(intent);
+        toaster("Got a new intent: " + intent.getStringExtra("shopping.item.name"));
+    }
+
     private boolean toaster(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         return true;

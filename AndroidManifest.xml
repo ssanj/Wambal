@@ -14,7 +14,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateBudgetActivity" android:label="Create Budget" />
-        <activity android:name=".ShoppingListActivity" android:label="Shopping List" />
+        <activity android:name=".ShoppingListActivity" android:label="Shopping List" android:launchMode="singleTask"/>
         <activity android:name=".ShoppingListItemActivity" android:label="Shopping List Item" />
     </application>
 </manifest>

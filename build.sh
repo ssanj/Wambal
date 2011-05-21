@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn clean install && adb install -r target/Wambal.apk
+mvn clean install

@@ -12,8 +12,10 @@
         <AutoCompleteTextView android:id="@+id/shopping_list_item_actv" android:layout_height="wrap_content" android:layout_width="fill_parent" />
         <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_qty" />
         <EditText android:id="@+id/shopping_list_item_qty_editText" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="number" />
+        <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_cost" />
+        <EditText android:id="@+id/shopping_list_item_cost_editText" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="numberDecimal" />
         <CheckBox
-            android:id="@+id/saveBudget"
+            android:id="@+id/shopping_list_item_save_item"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/save_settings" />
