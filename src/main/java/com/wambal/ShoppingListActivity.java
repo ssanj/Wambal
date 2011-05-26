@@ -4,20 +4,43 @@
  */
 package com.wambal;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.wambal.data.ShoppingListItem;
 
-public final class ShoppingListActivity extends Activity {
+public final class ShoppingListActivity extends ListActivity {
 
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.shopping_list);
+        setListAdapter(new ArrayAdapter<String>(this, R.layout.shopping_list_line_item,
+                new String[]{"Ham",
+                             "Cheese",
+                             "Eggs",
+                             "Chocolates",
+                             "Pringles",
+                             "Soup",
+                             "Bread",
+                             "Butter",
+                             "Coke",
+                             "Diet Coke",
+                             "Milk"
+                }));
+        ListView listView = getListView();
+        listView.setTextFilterEnabled(true);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override public void onItemClick(final AdapterView<?> adapterView, final View view, final int i, final long l) {
+                Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override public boolean onCreateOptionsMenu(final Menu menu) {
