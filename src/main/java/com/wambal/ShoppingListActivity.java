@@ -7,9 +7,11 @@ package com.wambal;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import com.wambal.data.ShoppingListItem;
 
 public final class ShoppingListActivity extends Activity {
 
@@ -35,11 +37,12 @@ public final class ShoppingListActivity extends Activity {
 
     @Override protected void onNewIntent(final Intent intent) {
         super.onNewIntent(intent);
-        toaster("Got a new intent: " + intent.getStringExtra("shopping.item.name"));
+        ShoppingListItem shoppingListItem = (ShoppingListItem) intent.getParcelableExtra("ShoppingListItemActivity.shoppingListItem");
+        toaster("Got a new intent: " + shoppingListItem.toString());
     }
 
     private boolean toaster(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         return true;
     }
 
