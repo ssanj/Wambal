@@ -30,12 +30,16 @@ public final class ShoppingListActivity extends ListActivity {
     private MyListAdapter adapter;
 
     public ShoppingListActivity() {
-        items = new ArrayList<ShoppingListItem>();
-        adapter = new MyListAdapter(items, ShoppingListActivity.this);
     }
 
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        restoreSaveData();
+        configureList();
+    }
+
+    private void configureList() {
+        adapter = new MyListAdapter(items, ShoppingListActivity.this);
         setListAdapter(adapter);
         ListView listView = getListView();
         listView.setTextFilterEnabled(true);
@@ -44,6 +48,15 @@ public final class ShoppingListActivity extends ListActivity {
                 Toast.makeText(getApplicationContext(), adapter.getItem(i).toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @SuppressWarnings({"unchecked"}) private void restoreSaveData() {
+        Object saved = getLastNonConfigurationInstance();
+        if (saved != null) {
+             items = (List<ShoppingListItem>) saved;
+        } else {
+            items = new ArrayList<ShoppingListItem>();
+        }
     }
 
     @Override public boolean onCreateOptionsMenu(final Menu menu) {
@@ -64,9 +77,11 @@ public final class ShoppingListActivity extends ListActivity {
     @Override protected void onNewIntent(final Intent intent) {
         super.onNewIntent(intent);
         ShoppingListItem shoppingListItem = (ShoppingListItem) intent.getParcelableExtra("ShoppingListItemActivity.shoppingListItem");
-        toaster("Got a new intent: " + shoppingListItem.toString());
-        items.add(shoppingListItem);
-        onContentChanged();
+        if (shoppingListItem != null) {
+            toaster("Got a new intent: " + shoppingListItem.toString());
+            items.add(shoppingListItem);
+            onContentChanged();
+        } else { /*  We got nothing */ }
     }
 
     private boolean toaster(String message) {
@@ -132,5 +147,7 @@ public final class ShoppingListActivity extends ListActivity {
         }
     }
 
-
+    @Override public Object onRetainNonConfigurationInstance() {
+        return items;
+    }
 }
