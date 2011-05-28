@@ -26,17 +26,16 @@ import java.util.List;
 
 public final class ShoppingListActivity extends ListActivity {
 
+    private List<ShoppingListItem> items;
+    private MyListAdapter adapter;
+
+    public ShoppingListActivity() {
+        items = new ArrayList<ShoppingListItem>();
+        adapter = new MyListAdapter(items, ShoppingListActivity.this);
+    }
+
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        List<ShoppingListItem> items = new ArrayList<ShoppingListItem>();
-        items.add(new ShoppingListItem("Ham", 4.50f, 1));
-        items.add(new ShoppingListItem("Cheese", 3.50f, 1));
-        items.add(new ShoppingListItem("Milk", 4.00f, 100));
-        items.add(new ShoppingListItem("Bread", 18.00f, 1));
-        items.add(new ShoppingListItem("Coke (30 Pack)", 32.00f, 1));
-        items.add(new ShoppingListItem("This is a really long piece of tex that will surely overflow", 10.00f, 1));
-        items.add(new ShoppingListItem("Water Filters", 100.50f, 6));
-        final MyListAdapter adapter = new MyListAdapter(items, ShoppingListActivity.this);
         setListAdapter(adapter);
         ListView listView = getListView();
         listView.setTextFilterEnabled(true);
@@ -66,6 +65,8 @@ public final class ShoppingListActivity extends ListActivity {
         super.onNewIntent(intent);
         ShoppingListItem shoppingListItem = (ShoppingListItem) intent.getParcelableExtra("ShoppingListItemActivity.shoppingListItem");
         toaster("Got a new intent: " + shoppingListItem.toString());
+        items.add(shoppingListItem);
+        onContentChanged();
     }
 
     private boolean toaster(String message) {
@@ -130,4 +131,6 @@ public final class ShoppingListActivity extends ListActivity {
             }
         }
     }
+
+
 }
