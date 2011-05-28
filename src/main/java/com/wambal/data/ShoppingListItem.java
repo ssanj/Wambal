@@ -13,6 +13,19 @@ public class ShoppingListItem implements Parcelable {
     public int quantity = 0;
     public boolean save = false;
 
+    public ShoppingListItem() { }
+
+    public ShoppingListItem(final String name, final float cost, final int quantity, final boolean save) {
+        this.name = name;
+        this.cost = cost;
+        this.quantity = quantity;
+        this.save = save;
+    }
+
+    public ShoppingListItem(final String name, final float cost, final int quantity) {
+        this(name, cost, quantity, false);
+    }
+
     @Override public int describeContents() {
         return 0;
     }

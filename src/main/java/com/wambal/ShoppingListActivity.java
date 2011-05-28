@@ -14,11 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.wambal.data.ShoppingListItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,14 +28,14 @@ public final class ShoppingListActivity extends ListActivity {
 
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<ShoppingListItem> items = new ArrayList<ShoppingListItem>();
-        items.add(new ShoppingListItem("Ham", "  4.50", 1));
-        items.add(new ShoppingListItem("Cheese", "  3.50", 1));
-        items.add(new ShoppingListItem("Milk", "  4.00", 100));
-        items.add(new ShoppingListItem("Bread", " 18.00", 1));
-        items.add(new ShoppingListItem("Coke (30 Pack)", " 32.00", 1));
-        items.add(new ShoppingListItem("This is a really long piece of tex that will surely overflow", " 10.00", 1));
-        items.add(new ShoppingListItem("Water Filters", "100.50", 6));
+        List<ShoppingListItem> items = new ArrayList<ShoppingListItem>();
+        items.add(new ShoppingListItem("Ham", 4.50f, 1));
+        items.add(new ShoppingListItem("Cheese", 3.50f, 1));
+        items.add(new ShoppingListItem("Milk", 4.00f, 100));
+        items.add(new ShoppingListItem("Bread", 18.00f, 1));
+        items.add(new ShoppingListItem("Coke (30 Pack)", 32.00f, 1));
+        items.add(new ShoppingListItem("This is a really long piece of tex that will surely overflow", 10.00f, 1));
+        items.add(new ShoppingListItem("Water Filters", 100.50f, 6));
         final MyListAdapter adapter = new MyListAdapter(items, ShoppingListActivity.this);
         setListAdapter(adapter);
         ListView listView = getListView();
@@ -75,26 +75,6 @@ public final class ShoppingListActivity extends ListActivity {
 
     private void showShoppingListItem() {
         startActivity(new Intent(ShoppingListActivity.this, ShoppingListItemActivity.class));
-    }
-
-    private static class ShoppingListItem {
-        public String name;
-        public String cost;
-        public String quantity;
-
-        private ShoppingListItem(final String name, final String cost, final int quantity) {
-            this.name = name;
-            this.cost = "$ " + cost;
-            this.quantity = "X" + quantity;
-        }
-
-        @Override public String toString() {
-            return "ShoppingListItem{" +
-                    "name='" + name + '\'' +
-                    ", cost=" + cost +
-                    ", quantity=" + quantity +
-                    '}';
-        }
     }
 
     private static class MyListAdapter extends BaseAdapter {
