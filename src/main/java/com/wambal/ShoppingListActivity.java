@@ -120,7 +120,7 @@ public final class ShoppingListActivity extends ListActivity {
             if (view == null) {
                 LayoutInflater inflater = getLayoutInflator();
                 if (inflater != null) {
-                    inflated = inflater.inflate(R.layout.shopping_list_line_item, viewGroup, false);
+                    inflated = inflater.inflate(R.layout.shopping_list_line_item2, viewGroup, false);
                 } else {
                     return null;
                 }
