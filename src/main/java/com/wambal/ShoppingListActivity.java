@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.HeaderViewListAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,12 +24,13 @@ import com.wambal.data.ShoppingListItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class ShoppingListActivity extends ListActivity {
 
     private List<ShoppingListItem> items;
-    private MyListAdapter adapter;
+    private ListAdapter adapter;
 
     public ShoppingListActivity() {
     }
@@ -39,7 +42,21 @@ public final class ShoppingListActivity extends ListActivity {
     }
 
     private void configureList() {
-        adapter = new MyListAdapter(items, ShoppingListActivity.this);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        if (inflater != null) {
+            ListView.FixedViewInfo fvi= getListView().new FixedViewInfo();
+            fvi.data = null;
+            fvi.isSelectable = false;
+            fvi.view = inflater.inflate(R.layout.shopping_list_header, null);
+            ArrayList<ListView.FixedViewInfo> footers = new ArrayList<ListView.FixedViewInfo>();
+            ArrayList<ListView.FixedViewInfo> headers = new ArrayList<ListView.FixedViewInfo>();
+            headers.add(fvi);
+            adapter = new HeaderViewListAdapter(headers, footers, new MyListAdapter(items, ShoppingListActivity.this));
+        } else {
+            Toast.makeText(this, "Could not add List header", Toast.LENGTH_SHORT).show();
+            adapter = new MyListAdapter(items, ShoppingListActivity.this);
+        }
+
         setListAdapter(adapter);
         ListView listView = getListView();
         listView.setTextFilterEnabled(true);
