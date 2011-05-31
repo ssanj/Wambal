@@ -4,7 +4,7 @@
               android:layout_height="fill_parent"
               android:orientation="horizontal"
               android:id="@+id/shopping_list_footer"
-              android:background="#ff00a72b"
+              android:background="@drawable/total_cost_background"
               android:padding="5dp"
         >
     <TextView
