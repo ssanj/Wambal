@@ -7,6 +7,7 @@ package com.wambal;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ public final class ShoppingListActivity extends ListActivity {
     private List<ShoppingListItem> items;
     private ListAdapter adapter;
     private MyListAdapter myListAdapter;
+    private TextView totalCost;
 
     public ShoppingListActivity() {
     }
@@ -43,20 +45,16 @@ public final class ShoppingListActivity extends ListActivity {
 
     private void configureList() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        myListAdapter = new MyListAdapter(items, ShoppingListActivity.this);
-        if (inflater != null) {
-            ListView.FixedViewInfo fvi= getListView().new FixedViewInfo();
-            fvi.data = null;
-            fvi.isSelectable = false;
-            fvi.view = inflater.inflate(R.layout.shopping_list_header, null);
-            ArrayList<ListView.FixedViewInfo> footers = new ArrayList<ListView.FixedViewInfo>();
-            ArrayList<ListView.FixedViewInfo> headers = new ArrayList<ListView.FixedViewInfo>();
-            headers.add(fvi);
-            adapter = new HeaderViewListAdapter(headers, footers, myListAdapter);
-        } else {
-            Toast.makeText(this, "Could not add List header", Toast.LENGTH_SHORT).show();
-            adapter = myListAdapter;
-        }
+
+        ArrayList<ListView.FixedViewInfo> footers = new ArrayList<ListView.FixedViewInfo>();
+        ArrayList<ListView.FixedViewInfo> headers = new ArrayList<ListView.FixedViewInfo>();
+        headers.add(createFixedViewInfo(inflater, R.layout.shopping_list_header));
+        ListView.FixedViewInfo footerFixedViewInfo = createFixedViewInfo(inflater, R.layout.shopping_list_footer);
+        totalCost = (TextView) footerFixedViewInfo.view.findViewById(R.id.shopping_list_footer_total_cost);
+//        totalCost.setText("0.00");
+        footers.add(footerFixedViewInfo);
+        myListAdapter = new MyListAdapter(items, ShoppingListActivity.this, totalCost);
+        adapter = new HeaderViewListAdapter(headers, footers, myListAdapter);
 
         setListAdapter(adapter);
         ListView listView = getListView();
@@ -66,6 +64,14 @@ public final class ShoppingListActivity extends ListActivity {
                 Toast.makeText(getApplicationContext(), adapter.getItem(i).toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private ListView.FixedViewInfo createFixedViewInfo(final LayoutInflater inflater, final int layout) {
+        ListView.FixedViewInfo fvi= getListView().new FixedViewInfo();
+        fvi.data = null;
+        fvi.isSelectable = false;
+        fvi.view = inflater.inflate(layout, null);
+        return fvi;
     }
 
     @SuppressWarnings({"unchecked"}) private void restoreSaveData() {
@@ -111,12 +117,15 @@ public final class ShoppingListActivity extends ListActivity {
 
     private static class MyListAdapter extends BaseAdapter {
 
-        private List<ShoppingListItem> shoppingListItemList;
-        private WeakReference<Context> context;
+        private final List<ShoppingListItem> shoppingListItemList;
+        private final TextView totalCost;
+        private final WeakReference<Context> context;
 
-        private MyListAdapter(List<ShoppingListItem> shoppingListItemList, Context context) {
+        private MyListAdapter(List<ShoppingListItem> shoppingListItemList, Context context, TextView totalCost) {
             this.shoppingListItemList = shoppingListItemList;
+            this.totalCost = totalCost;
             this.context = new WeakReference<Context>(context);
+            updateTotals();
         }
 
         @Override public int getCount() {
@@ -134,6 +143,23 @@ public final class ShoppingListActivity extends ListActivity {
         public void addItem(ShoppingListItem shoppingListItem) {
             shoppingListItemList.add(shoppingListItem);
             notifyDataSetChanged();
+            updateTotals();
+        }
+
+        private void updateTotals() {
+            new AsyncTask<Void, Void, Float>() {
+                @Override protected Float doInBackground(final Void... voids) { return getTotal(); }
+                @Override protected void onPostExecute(final Float total) { totalCost.setText("" + total); }
+            }.execute();
+        }
+
+        private float getTotal() {
+            float total = 0f;
+            for (ShoppingListItem sli : shoppingListItemList) {
+                total += sli.cost;
+            }
+
+            return total;
         }
 
         @Override public View getView(final int i, final View view, final ViewGroup viewGroup) {

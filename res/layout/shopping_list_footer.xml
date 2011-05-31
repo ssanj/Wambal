@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="horizontal"
+              android:id="@+id/shopping_list_footer"
+              android:background="#ff00a72b"
+              android:padding="5dp"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:padding="2dp"
+        android:textSize="20sp"
+        android:layout_weight="1"
+        android:text="@string/total_cost_text"
+        android:layout_marginLeft="5dip">
+    </TextView>
+    <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="2dp"
+            android:textSize="20sp"
+            android:text="$"
+            android:id="@+id/shopping_list_footer_dollar_sign"
+            android:layout_marginLeft="5dip">
+        </TextView>
+        <TextView
+            android:id="@+id/shopping_list_footer_total_cost"
+            android:layout_width="90sp"
+            android:layout_height="fill_parent"
+            android:padding="2dp"
+            android:textSize="20sp"
+            android:layout_toRightOf="@id/shopping_list_footer_dollar_sign">
+        </TextView>
+    </RelativeLayout>
+</LinearLayout>
+

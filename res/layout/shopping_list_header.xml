@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
-    <TextView
-      android:id="@+id/shopping_list_header"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:padding="2dp"
-      android:textSize="50sp"
-      android:text="Please enter your items"
-    />
-</LinearLayout>
+<TextView  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/shopping_list_header"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:padding="2dp"
+  android:textSize="50sp"
+  android:text="Please enter your items"
+/>
