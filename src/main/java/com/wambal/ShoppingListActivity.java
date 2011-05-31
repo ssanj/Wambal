@@ -24,13 +24,13 @@ import com.wambal.data.ShoppingListItem;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class ShoppingListActivity extends ListActivity {
 
     private List<ShoppingListItem> items;
     private ListAdapter adapter;
+    private MyListAdapter myListAdapter;
 
     public ShoppingListActivity() {
     }
@@ -43,6 +43,7 @@ public final class ShoppingListActivity extends ListActivity {
 
     private void configureList() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        myListAdapter = new MyListAdapter(items, ShoppingListActivity.this);
         if (inflater != null) {
             ListView.FixedViewInfo fvi= getListView().new FixedViewInfo();
             fvi.data = null;
@@ -51,10 +52,10 @@ public final class ShoppingListActivity extends ListActivity {
             ArrayList<ListView.FixedViewInfo> footers = new ArrayList<ListView.FixedViewInfo>();
             ArrayList<ListView.FixedViewInfo> headers = new ArrayList<ListView.FixedViewInfo>();
             headers.add(fvi);
-            adapter = new HeaderViewListAdapter(headers, footers, new MyListAdapter(items, ShoppingListActivity.this));
+            adapter = new HeaderViewListAdapter(headers, footers, myListAdapter);
         } else {
             Toast.makeText(this, "Could not add List header", Toast.LENGTH_SHORT).show();
-            adapter = new MyListAdapter(items, ShoppingListActivity.this);
+            adapter = myListAdapter;
         }
 
         setListAdapter(adapter);
@@ -92,12 +93,10 @@ public final class ShoppingListActivity extends ListActivity {
     }
 
     @Override protected void onNewIntent(final Intent intent) {
-        super.onNewIntent(intent);
         ShoppingListItem shoppingListItem = (ShoppingListItem) intent.getParcelableExtra("ShoppingListItemActivity.shoppingListItem");
         if (shoppingListItem != null) {
             toaster("Got a new intent: " + shoppingListItem.toString());
-            items.add(shoppingListItem);
-            onContentChanged();
+            myListAdapter.addItem(shoppingListItem);
         } else { /*  We got nothing */ }
     }
 
@@ -130,6 +129,11 @@ public final class ShoppingListActivity extends ListActivity {
 
         @Override public long getItemId(final int i) {
             return i;
+        }
+
+        public void addItem(ShoppingListItem shoppingListItem) {
+            shoppingListItemList.add(shoppingListItem);
+            notifyDataSetChanged();
         }
 
         @Override public View getView(final int i, final View view, final ViewGroup viewGroup) {
