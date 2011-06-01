@@ -12,10 +12,20 @@
     <string name="add_button_text">Add</string>
     <string name="empty_shopping_list_view_text">Please add items...</string>
     <string name="total_cost_text">Total</string>
+    <string name="select_weight_prompt">Please select a weight</string>
+    <string name="choose_qty_item_name">Please select a unit value</string>
     <string-array name="budget_categories">
         <item>Groceries</item>
         <item>Shopping</item>
         <item>Computers</item>
         <item>Travel</item>
+    </string-array>
+    <string-array name="weight_categories">
+        <item>Kilograms</item>
+        <item>grams</item>
+    </string-array>
+    <string-array name="qty_choice_categories">
+        <item>Items</item>
+        <item>Weight</item>
     </string-array>
 </resources>

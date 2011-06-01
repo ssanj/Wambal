@@ -7,18 +7,17 @@
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:orientation="vertical">
-
         <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_name" />
         <AutoCompleteTextView android:id="@+id/shopping_list_item_actv" android:layout_height="wrap_content" android:layout_width="fill_parent" />
-        <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_qty" />
-        <EditText android:id="@+id/shopping_list_item_qty_editText" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="number" />
-        <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/item_cost" />
-        <EditText android:id="@+id/shopping_list_item_cost_editText" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="numberDecimal" />
-        <CheckBox
-            android:id="@+id/shopping_list_item_save_item"
+        <TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/choose_qty_item_name" />
+        <Spinner android:id="@+id/shopping_list_item_qty_choice_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save_settings" />
-        <Button android:id="@+id/shopping_list_item_add_button" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/add_button_text" />
+            android:prompt="@string/choose_qty_item_name" />
+        <LinearLayout
+              android:id="@+id/shopping_list_item_placeholder"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical" />
     </LinearLayout>
 </ScrollView>

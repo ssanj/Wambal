@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import com.wambal.data.ShoppingListItem;
 import com.wambal.data.TextDataRetriever;
 
@@ -25,10 +27,30 @@ public final class ShoppingListItemActivity extends Activity {
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shopping_list_item);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.shopping_list_item_placeholder);
+        layout.addView(getLayoutInflater().inflate(R.layout.shopping_list_item_qty_by_item, null));
+        layout.addView(getLayoutInflater().inflate(R.layout.shopping_list_item_qty_by_weight, null));
+        layout.addView(getLayoutInflater().inflate(R.layout.shopping_list_item_bottom, null));
 
         final ShoppingListItem shoppingListItem = new ShoppingListItem();
         final AutoCompleteTextView itemNameACTV = createItemNameDropDown();
         createAddButton(shoppingListItem, itemNameACTV);
+        createQtyChoiceSpinner();
+        createWeightSpinner();
+    }
+
+    private void createQtyChoiceSpinner() {
+        Spinner weights = (Spinner) findViewById(R.id.shopping_list_item_qty_choice_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.qty_choice_categories, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        weights.setAdapter(adapter);
+    }
+
+    private void createWeightSpinner() {
+        Spinner weights = (Spinner) findViewById(R.id.shopping_list_item_qty_weight_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.weight_categories, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        weights.setAdapter(adapter);
     }
 
     private AutoCompleteTextView createItemNameDropDown() {
