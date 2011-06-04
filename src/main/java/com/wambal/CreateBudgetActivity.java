@@ -5,7 +5,10 @@
 package com.wambal;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import com.wambal.cp.WambalContentProvider;
 
 public final class CreateBudgetActivity extends Activity {
 
@@ -65,11 +69,29 @@ public final class CreateBudgetActivity extends Activity {
                 CheckBox saveBudget = findTypedViewById(R.id.saveBudget);
                 createdBudget.save = saveBudget.isChecked();
 
+                insertDataToDatabase(createdBudget);
                 Toast.makeText(CreateBudgetActivity.this, createdBudget.toString(), Toast.LENGTH_LONG).show();
 
                 startActivity(new Intent(CreateBudgetActivity.this, ShoppingListActivity.class));
             }
         });
+    }
+
+    private void insertDataToDatabase(final CreatedBudget createdBudget) {
+        ContentValues values = new ContentValues();
+        values.put(WambalContentProvider.Category.NAME, createdBudget.category);
+        Uri insert = getContentResolver().insert(WambalContentProvider.CONTENT_URI, values);
+        Cursor cursor = getContentResolver().query(WambalContentProvider.CONTENT_URI, new String[]{WambalContentProvider.Category.NAME}, null, null, WambalContentProvider.Category.NAME);
+        int nameColumn = cursor.getColumnIndex(WambalContentProvider.Category.NAME);
+        StringBuilder sb = new StringBuilder();
+        if (cursor.moveToFirst()) {
+            do {
+                sb.append(cursor.getString(nameColumn)).append(" ");
+            } while (cursor.moveToNext());
+            Toast.makeText(CreateBudgetActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(CreateBudgetActivity.this, "No Results Found", Toast.LENGTH_LONG).show();
+        }
     }
 
     @SuppressWarnings({"unchecked"})

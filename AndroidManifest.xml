@@ -21,5 +21,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ShoppingListItemActivity" android:label="Shopping List Item" />
+        <provider android:name="com.wambal.cp.WambalContentProvider" android:authorities="com.wambal.cp.wambalcontentprovider" />
     </application>
 </manifest>
