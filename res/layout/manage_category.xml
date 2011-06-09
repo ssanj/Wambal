@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+    <RelativeLayout
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="0"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textSize="50sp"
+            android:text="Please select a category"
+            android:id="@+id/manage_category_instructions_text"
+        />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="*"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentRight="true"
+        />
+    </RelativeLayout>
+    <ListView
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_weight="1"
+         android:id="@+id/manage_category_category_list"
+    />
+</LinearLayout>

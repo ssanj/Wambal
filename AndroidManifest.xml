@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ManageCategoryActivity" android:label="Manager Categories" />
         <activity android:name=".ShoppingListItemActivity" android:label="Shopping List Item" />
         <provider android:name="com.wambal.cp.WambalContentProvider" android:authorities="com.wambal.cp.wambalcontentprovider" />
     </application>

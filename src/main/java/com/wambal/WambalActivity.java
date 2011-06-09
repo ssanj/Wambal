@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import com.wambal.activity.ManageCategoryActivity;
 
 public class WambalActivity extends Activity {
 
@@ -19,8 +20,9 @@ public class WambalActivity extends Activity {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override public void onItemClick(final AdapterView<?> adapterView, final View view, final int position, final long index) {
-                Intent intent = new Intent(WambalActivity.this, CreateBudgetActivity.class);
-                startActivity(intent);
+                //TODO: Fix!
+                startActivity((position == 2) ? new Intent(WambalActivity.this, ManageCategoryActivity.class) :
+                        new Intent(WambalActivity.this, CreateBudgetActivity.class));
             }
         });
     }
