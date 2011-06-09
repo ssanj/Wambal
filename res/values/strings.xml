@@ -14,6 +14,8 @@
     <string name="total_cost_text">Total</string>
     <string name="select_weight_prompt">Please select a weight</string>
     <string name="choose_qty_item_name">Please select a unit value</string>
+    <string name="create_category_select_name">Category Name</string>
+    <string name="create_category_title">Create a category</string>
     <string-array name="budget_categories">
         <item>Groceries</item>
         <item>Shopping</item>

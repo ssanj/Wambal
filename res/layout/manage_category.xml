@@ -21,6 +21,8 @@
             android:text="*"
             android:layout_marginLeft="5dp"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/manage_category_instructions_text"
+            android:id="@+id/manage_category_add_category_button"
         />
     </RelativeLayout>
     <ListView
