@@ -7,27 +7,20 @@ package com.wambal.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HeaderViewListAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 import com.wambal.R;
 import com.wambal.cp.WambalContentProvider;
-
-import java.net.MulticastSocket;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
 
 public final class ManageCategoryActivity extends Activity {
 
@@ -43,13 +36,31 @@ public final class ManageCategoryActivity extends Activity {
             }
         });
 
-        ListView listView = (ListView) findViewById(R.id.manage_category_category_list);
-        Cursor cursor = getContentResolver().query(WambalContentProvider.CONTENT_URI, new String[]{WambalContentProvider.Category._ID, WambalContentProvider.Category.NAME}, null, null, WambalContentProvider.Category.NAME);
-        startManagingCursor(cursor);
+        loadCategories();
+    }
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor,
+    private void loadCategories() {
+        new AsyncTask<Void, Void, Cursor>() {
+
+            @Override protected Cursor doInBackground(final Void... voids) {
+                return getCategoryListCursor();
+            }
+
+            @Override protected void onPostExecute(final Cursor cursor) {
+                startManagingCursor(cursor);
+                ListView listView = (ListView) findViewById(R.id.manage_category_category_list);
+                SimpleCursorAdapter adapter = new SimpleCursorAdapter(ManageCategoryActivity.this, android.R.layout.simple_list_item_1, cursor,
                 new String[]{WambalContentProvider.Category.NAME}, new int[]{android.R.id.text1});
-        listView.setAdapter(adapter);
+                listView.setAdapter(adapter);
+            }
+        }.execute((Void) null);
+    }
+
+    private Cursor getCategoryListCursor() {
+        return getContentResolver().query(WambalContentProvider.CONTENT_URI,
+                                            new String[]{WambalContentProvider.Category._ID,
+                                                    WambalContentProvider.Category.NAME}, null, null, WambalContentProvider.Category.NAME);
+
     }
 
     @Override protected Dialog onCreateDialog(final int id) {
