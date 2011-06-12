@@ -9,10 +9,6 @@
             android:layout_weight="0"
             android:orientation="vertical"
             >
-        <!--<RelativeLayout-->
-              <!--android:layout_width="match_parent"-->
-              <!--android:layout_height="match_parent"-->
-        <!-->-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -29,7 +25,6 @@
             android:layout_alignTop="@id/manage_category_instructions_text"
             android:id="@+id/manage_category_add_category_button"
         />
-        <!--</RelativeLayout>-->
     </LinearLayout>
     <ListView
          android:layout_width="wrap_content"

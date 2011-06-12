@@ -8,11 +8,13 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:layout_marginLeft="5dp"
+              android:singleLine="true"
               android:text="Category Name"
     />
     <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:id="@+id/manage_category_dialog_template_name"
     />
 </LinearLayout>
