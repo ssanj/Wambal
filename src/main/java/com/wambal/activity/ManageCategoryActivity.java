@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.wambal.R;
 import com.wambal.cp.WambalContentProvider;
@@ -73,31 +74,33 @@ public final class ManageCategoryActivity extends Activity {
     }
 
     private Dialog createCreateCategoryDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.create_category_title);
-        final View customView = getLayoutInflater().inflate(R.layout.manage_category_dialog_template, null);
-        builder.setView(customView);
-        builder.setCancelable(true)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (dialog instanceof Dialog) {
-                            EditText text = (EditText) ((Dialog) dialog).findViewById(R.id.manage_category_dialog_template_name);
-                            String category = text.getText().toString();
-                            if (isUnique(category)) {
-                                insertCategory(category);
-                            } else {
-                                Toast.makeText(ManageCategoryActivity.this, "Please enter a unique category name", Toast.LENGTH_SHORT).show();
-                                //keep dialog alive?
-                            }
-                        } else { /*  Not a dialog so do nothing. */ }
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        return builder.create();
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.manage_category_dialog_template);
+        dialog.setTitle(R.string.create_category_title);
+        Button okButton = (Button) dialog.findViewById(R.id.manage_category_dialog_template_ok_button);
+        final TextView error = (TextView) dialog.findViewById(R.id.manage_category_dialog_template_error_text);
+        error.setText("Please enter a unqiue category name");
+        error.setVisibility(View.INVISIBLE);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(final View view) {
+                EditText text = (EditText) dialog.findViewById(R.id.manage_category_dialog_template_name);
+                String category = text.getText().toString();
+                if (isUnique(category)) {
+                    insertCategory(category);
+                    dialog.dismiss();
+                } else {
+                    error.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        Button cancelButton = (Button) dialog.findViewById(R.id.manage_category_dialog_template_cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(final View view) {
+                dialog.dismiss();
+            }
+        });
+
+        return dialog;
     }
 
     private boolean isUnique(final String category) {
@@ -131,6 +134,8 @@ public final class ManageCategoryActivity extends Activity {
     @Override protected void onPrepareDialog(final int id, final Dialog dialog) {
         switch (id) {
             case CREATE_DIALOG:
+                TextView error = (TextView) dialog.findViewById(R.id.manage_category_dialog_template_error_text);
+                error.setVisibility(View.INVISIBLE);
                 EditText text = (EditText) dialog.findViewById(R.id.manage_category_dialog_template_name);
                 text.getText().clear();
                 break;

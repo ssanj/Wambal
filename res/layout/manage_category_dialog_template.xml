@@ -3,7 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:orientation="vertical">
+              android:padding="5dp"
+              android:orientation="vertical"
+>
     <TextView
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
@@ -17,4 +19,34 @@
             android:singleLine="true"
             android:id="@+id/manage_category_dialog_template_name"
     />
+    <TextView
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="5dp"
+              android:layout_marginTop="2dp"
+              android:layout_marginBottom="10dp"
+              android:id="@+id/manage_category_dialog_template_error_text"
+    />
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+    >
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="OK"
+                android:layout_weight="1"
+                android:id="@+id/manage_category_dialog_template_ok_button"
+            />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Cancel"
+                android:layout_weight="1"
+                android:id="@+id/manage_category_dialog_template_cancel_button"
+            />
+    </LinearLayout>
 </LinearLayout>
