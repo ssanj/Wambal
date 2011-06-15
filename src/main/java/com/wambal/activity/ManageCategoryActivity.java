@@ -7,15 +7,15 @@ package com.wambal.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.AndroidCharacter;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -55,6 +55,7 @@ public final class ManageCategoryActivity extends Activity {
                 SimpleCursorAdapter adapter = new SimpleCursorAdapter(ManageCategoryActivity.this, R.layout.manage_category_list_line_item, cursor,
                 new String[]{WambalContentProvider.Category.NAME}, new int[]{R.id.manage_category_list_line_item_text});
                 listView.setAdapter(adapter);
+                registerForContextMenu(listView);
             }
         }.execute((Void) null);
     }
@@ -84,7 +85,7 @@ public final class ManageCategoryActivity extends Activity {
 
         final Button okButton = (Button) view.findViewById(R.id.manage_category_dialog_template_ok_button);
         final TextView error = (TextView) view.findViewById(R.id.manage_category_dialog_template_error_text);
-        error.setText("Please enter a unqiue category name");
+        error.setText("Please enter a unique category name");
         error.setVisibility(View.INVISIBLE);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(final View button) {
@@ -146,5 +147,31 @@ public final class ManageCategoryActivity extends Activity {
                 break;
             default: super.onPrepareDialog(id, dialog);
         }
+    }
+
+    @Override public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle(R.string.manage_category_context_menu_title);
+        getMenuInflater().inflate(R.menu.manage_category_menu, menu);
+    }
+
+    @Override public boolean onContextItemSelected(final MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+         ListView list = (ListView) findViewById(R.id.manage_category_category_list);
+         switch(item.getItemId()) {
+            case R.id.manage_category_edit_item_context_menu:
+                Toast.makeText(this, "Edit Item: " + list.getItemAtPosition(info.position).toString(), Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.manage_category_delete_item_context_menu:
+                deleteItem((int) info.id);
+                return true;
+            default: return super.onContextItemSelected(item);
+        }
+    }
+
+    private void deleteItem(final int id) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(WambalContentProvider.Category._ID, id);
+        getContentResolver().delete(Uri.withAppendedPath(WambalContentProvider.Category.CONTENT_URI_SINGLE, ""+id), null, null);
     }
 }
