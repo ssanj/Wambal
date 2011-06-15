@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.AndroidCharacter;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -42,20 +43,27 @@ public final class ManageCategoryActivity extends Activity {
     }
 
     private void loadCategories() {
-        new AsyncTask<Void, Void, Cursor>() {
+        ListView listView = (ListView) findViewById(R.id.manage_category_category_list);
+        ArrayAdapter adapter = new ArrayAdapter(ManageCategoryActivity.this, R.layout.manage_category_list_line_item,
+        R.id.manage_category_list_line_item_text, new String[] {"one", "two", "three"});
+        listView.setAdapter(adapter);
 
-            @Override protected Cursor doInBackground(final Void... voids) {
-                return getCategoryListCursor();
-            }
-
-            @Override protected void onPostExecute(final Cursor cursor) {
-                startManagingCursor(cursor);
-                ListView listView = (ListView) findViewById(R.id.manage_category_category_list);
-                SimpleCursorAdapter adapter = new SimpleCursorAdapter(ManageCategoryActivity.this, android.R.layout.simple_list_item_1, cursor,
-                new String[]{WambalContentProvider.Category.NAME}, new int[]{android.R.id.text1});
-                listView.setAdapter(adapter);
-            }
-        }.execute((Void) null);
+//        new AsyncTask<Void, Void, Cursor>() {
+//
+//            @Override protected Cursor doInBackground(final Void... voids) {
+//                return getCategoryListCursor();
+//            }
+//
+//            @Override protected void onPostExecute(final Cursor cursor) {
+//                startManagingCursor(cursor);
+//                ListView listView = (ListView) findViewById(R.id.manage_category_category_list);
+////                SimpleCursorAdapter adapter = new SimpleCursorAdapter(ManageCategoryActivity.this, R.layout.manage_category_list_line_item, cursor,
+////                new String[]{WambalContentProvider.Category.NAME}, new int[]{R.id.manage_category_list_line_item_text});
+//                ArrayAdapter adapter = new ArrayAdapter(ManageCategoryActivity.this, R.layout.manage_category_list_line_item,
+//                R.id.manage_category_list_line_item_text, new String[] {"one", "two", "three"});
+//                listView.setAdapter(adapter);
+//            }
+//        }.execute((Void) null);
     }
 
     private Cursor getCategoryListCursor() {
