@@ -76,16 +76,19 @@ public final class ManageCategoryActivity extends Activity {
     }
 
     private Dialog createCreateCategoryDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.manage_category_dialog_template);
-        dialog.setTitle(R.string.create_category_title);
-        Button okButton = (Button) dialog.findViewById(R.id.manage_category_dialog_template_ok_button);
-        final TextView error = (TextView) dialog.findViewById(R.id.manage_category_dialog_template_error_text);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.create_category_title);
+        final View view = getLayoutInflater().inflate(R.layout.manage_category_dialog_template, null);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        final Button okButton = (Button) view.findViewById(R.id.manage_category_dialog_template_ok_button);
+        final TextView error = (TextView) view.findViewById(R.id.manage_category_dialog_template_error_text);
         error.setText("Please enter a unqiue category name");
         error.setVisibility(View.INVISIBLE);
         okButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(final View view) {
-                EditText text = (EditText) dialog.findViewById(R.id.manage_category_dialog_template_name);
+            @Override public void onClick(final View button) {
+                EditText text = (EditText) view.findViewById(R.id.manage_category_dialog_template_name);
                 String category = text.getText().toString();
                 if (isUnique(category)) {
                     insertCategory(category);
@@ -95,9 +98,9 @@ public final class ManageCategoryActivity extends Activity {
                 }
             }
         });
-        Button cancelButton = (Button) dialog.findViewById(R.id.manage_category_dialog_template_cancel_button);
+        final Button cancelButton = (Button) view.findViewById(R.id.manage_category_dialog_template_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(final View view) {
+            @Override public void onClick(final View button) {
                 dialog.dismiss();
             }
         });

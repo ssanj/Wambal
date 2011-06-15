@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
+        android:padding="10dp"
         android:gravity="left"
         android:textSize="16sp"
         android:id="@+id/manage_category_list_line_item_text"
