@@ -96,10 +96,9 @@ public final class ManageCategoryActivity extends Activity {
         final TextView error = (TextView) view.findViewById(R.id.manage_category_dialog_template_error_text);
         error.setText("Please update category name");
         error.setVisibility(View.INVISIBLE);
-        final EditText text = (EditText) view.findViewById(R.id.manage_category_dialog_template_name);
-        text.setTag(args.getInt(CATEGORY_EDIT_ID));
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(final View button) {
+                final EditText text = (EditText) view.findViewById(R.id.manage_category_dialog_template_name);
                 String category = text.getText().toString();
                 if (isUnique(category)) {
                     updateCategory(category, text.getTag().toString());
@@ -203,6 +202,7 @@ public final class ManageCategoryActivity extends Activity {
                 error1.setVisibility(View.INVISIBLE);
                 EditText text1 = (EditText) dialog.findViewById(R.id.manage_category_dialog_template_name);
                 text1.setText(args.getString(CATEGORY_EDIT_NAME));
+                text1.setTag(args.getInt(CATEGORY_EDIT_ID));
                 break;
             default: super.onPrepareDialog(id, dialog, args);
         }
