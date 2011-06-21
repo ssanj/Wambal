@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,10 +25,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.wambal.R;
 import com.wambal.cp.WambalContentProvider;
+import org.apache.http.annotation.ThreadSafe;
+
+import javax.security.auth.login.LoginException;
 
 public final class ManageCategoryActivity extends Activity {
 
     private static final int CREATE_DIALOG = 1;
+    private static final int EDIT_DIALOG = 2;
+    private static final String CATEGORY_EDIT_ID = "category.edit.id";
+    private static final String CATEGORY_EDIT_NAME = "category.edit.name";
 
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +74,58 @@ public final class ManageCategoryActivity extends Activity {
 
     }
 
-    @Override protected Dialog onCreateDialog(final int id) {
+    @Override protected Dialog onCreateDialog(final int id, final Bundle args) {
         switch (id) {
             case CREATE_DIALOG:
                 return createCreateCategoryDialog();
+            case EDIT_DIALOG:
+                return createEditCategoryDialog(args);
             default:
                 return super.onCreateDialog(id);
+        }
+    }
+
+    private Dialog createEditCategoryDialog(final Bundle args) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.edit_category_title);
+        final View view = getLayoutInflater().inflate(R.layout.manage_category_dialog_template, null);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        final Button okButton = (Button) view.findViewById(R.id.manage_category_dialog_template_ok_button);
+        final TextView error = (TextView) view.findViewById(R.id.manage_category_dialog_template_error_text);
+        error.setText("Please update category name");
+        error.setVisibility(View.INVISIBLE);
+        final EditText text = (EditText) view.findViewById(R.id.manage_category_dialog_template_name);
+        text.setTag(args.getInt(CATEGORY_EDIT_ID));
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(final View button) {
+                String category = text.getText().toString();
+                if (isUnique(category)) {
+                    updateCategory(category, text.getTag().toString());
+                    dialog.dismiss();
+                } else {
+                    error.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        final Button cancelButton = (Button) view.findViewById(R.id.manage_category_dialog_template_cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(final View button) {
+                dialog.dismiss();
+            }
+        });
+
+        return dialog;
+    }
+
+    private void updateCategory(final String category, final String categoryId) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(WambalContentProvider.Category.NAME, category);
+        try {
+            getContentResolver().update(Uri.withAppendedPath(WambalContentProvider.CONTENT_URI, categoryId), contentValues, null, null);
+        } catch (Exception e) {
+            Toast.makeText(this, "Could not update category. " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -137,7 +190,7 @@ public final class ManageCategoryActivity extends Activity {
         }
     }
 
-    @Override protected void onPrepareDialog(final int id, final Dialog dialog) {
+    @Override protected void onPrepareDialog(final int id, final Dialog dialog, final Bundle args) {
         switch (id) {
             case CREATE_DIALOG:
                 TextView error = (TextView) dialog.findViewById(R.id.manage_category_dialog_template_error_text);
@@ -145,7 +198,13 @@ public final class ManageCategoryActivity extends Activity {
                 EditText text = (EditText) dialog.findViewById(R.id.manage_category_dialog_template_name);
                 text.getText().clear();
                 break;
-            default: super.onPrepareDialog(id, dialog);
+            case EDIT_DIALOG:
+                TextView error1 = (TextView) dialog.findViewById(R.id.manage_category_dialog_template_error_text);
+                error1.setVisibility(View.INVISIBLE);
+                EditText text1 = (EditText) dialog.findViewById(R.id.manage_category_dialog_template_name);
+                text1.setText(args.getString(CATEGORY_EDIT_NAME));
+                break;
+            default: super.onPrepareDialog(id, dialog, args);
         }
     }
 
@@ -160,13 +219,29 @@ public final class ManageCategoryActivity extends Activity {
          ListView list = (ListView) findViewById(R.id.manage_category_category_list);
          switch(item.getItemId()) {
             case R.id.manage_category_edit_item_context_menu:
-                Toast.makeText(this, "Edit Item: " + list.getItemAtPosition(info.position).toString(), Toast.LENGTH_SHORT).show();
+                final Cursor cursor = (Cursor) list.getItemAtPosition(info.position);
+                editItem(cursor);
                 return true;
             case R.id.manage_category_delete_item_context_menu:
                 deleteItem((int) info.id);
                 return true;
             default: return super.onContextItemSelected(item);
         }
+    }
+
+    private boolean editItem(final Cursor cursor) {
+        int idCol = cursor.getColumnIndex(WambalContentProvider.Category._ID);
+        int nameCol = cursor.getColumnIndex(WambalContentProvider.Category.NAME);
+        final Bundle args = new Bundle();
+        if (idCol != -1 && nameCol != -1) {
+            args.putInt(CATEGORY_EDIT_ID, cursor.getInt(idCol));
+            args.putString(CATEGORY_EDIT_NAME, cursor.getString(nameCol));
+            return showDialog(EDIT_DIALOG, args);
+        } else {
+            Toast.makeText(this, "There was an error connecting to the database.", Toast.LENGTH_LONG);
+            return true; // there was a problem with the table columns, return true to signify the event was handled.
+        }
+
     }
 
     private void deleteItem(final int id) {

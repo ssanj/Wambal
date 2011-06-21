@@ -16,6 +16,7 @@
     <string name="choose_qty_item_name">Please select a unit value</string>
     <string name="create_category_select_name">Category Name</string>
     <string name="create_category_title">Create a category</string>
+    <string name="edit_category_title">Edit category name</string>
     <string name="manage_category_context_menu_title">Category</string>
     <string name="manage_category_edit_item_context_text">Edit</string>
     <string name="manage_category_delete_item_context_text">Delete</string>
