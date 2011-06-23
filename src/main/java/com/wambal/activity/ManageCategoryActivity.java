@@ -7,12 +7,12 @@ package com.wambal.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,20 +25,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.wambal.R;
 import com.wambal.cp.WambalContentProvider;
-import org.apache.http.annotation.ThreadSafe;
-
-import javax.security.auth.login.LoginException;
 
 public final class ManageCategoryActivity extends Activity {
 
     private static final int CREATE_DIALOG = 1;
     private static final int EDIT_DIALOG = 2;
+    private static final int PROGRESS_DIALOG = 3;
     private static final String CATEGORY_EDIT_ID = "category.edit.id";
     private static final String CATEGORY_EDIT_NAME = "category.edit.name";
+
+    private ProgressDialog progressDialog;
 
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_category);
+        progressDialog = createProgressDialog();
         Button addButton = (Button) findViewById(R.id.manage_category_add_category_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(final View view) {
@@ -52,6 +53,12 @@ public final class ManageCategoryActivity extends Activity {
     private void loadCategories() {
         new AsyncTask<Void, Void, Cursor>() {
 
+            @Override protected void onPreExecute() {
+                if (!progressDialog.isShowing()) {
+                    showDialog(PROGRESS_DIALOG);
+                }
+            }
+
             @Override protected Cursor doInBackground(final Void... voids) {
                 return getCategoryListCursor();
             }
@@ -63,8 +70,20 @@ public final class ManageCategoryActivity extends Activity {
                 new String[]{WambalContentProvider.Category.NAME}, new int[]{R.id.manage_category_list_line_item_text});
                 listView.setAdapter(adapter);
                 registerForContextMenu(listView);
+
+                if (progressDialog.isShowing()) {
+                    dismissDialog(PROGRESS_DIALOG);
+                }
+
             }
         }.execute((Void) null);
+    }
+
+    @Override protected void onDestroy() {
+        if (progressDialog.isShowing()) {
+            removeDialog(PROGRESS_DIALOG);
+        }
+        super.onDestroy();
     }
 
     private Cursor getCategoryListCursor() {
@@ -80,9 +99,19 @@ public final class ManageCategoryActivity extends Activity {
                 return createCreateCategoryDialog();
             case EDIT_DIALOG:
                 return createEditCategoryDialog(args);
+            case PROGRESS_DIALOG:
+                return progressDialog;
             default:
                 return super.onCreateDialog(id);
         }
+    }
+
+    private ProgressDialog createProgressDialog() {
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Manage Category");
+        dialog.setMessage("Loading...");
+        return dialog;
     }
 
     private Dialog createEditCategoryDialog(final Bundle args) {
