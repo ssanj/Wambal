@@ -9,10 +9,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.AndroidCharacter;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,15 +33,18 @@ public final class ManageCategoryActivity extends Activity {
     private static final int CREATE_DIALOG = 1;
     private static final int EDIT_DIALOG = 2;
     private static final int PROGRESS_DIALOG = 3;
+    private static final int DELETION_ERROR__DIALOG = 4;
     private static final String CATEGORY_EDIT_ID = "category.edit.id";
     private static final String CATEGORY_EDIT_NAME = "category.edit.name";
+    private static final String PROGRESS_MESSAGE = "category.progress.message";
 
     private ProgressDialog progressDialog;
+    private AlertDialog deletionErrorDialog;
 
     @Override protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_category);
-        progressDialog = createProgressDialog();
+        createDialogs();
         Button addButton = (Button) findViewById(R.id.manage_category_add_category_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(final View view) {
@@ -50,12 +55,26 @@ public final class ManageCategoryActivity extends Activity {
         loadCategories();
     }
 
+    private void createDialogs() {
+        progressDialog = createProgressDialog();
+
+        deletionErrorDialog = new AlertDialog.Builder(ManageCategoryActivity.this).
+                setTitle("ManageCategory").
+                setMessage("Could not delete category").setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override public void onClick(final DialogInterface dialog, final int which) {
+                dialog.dismiss();
+            }
+        }).create();
+    }
+
     private void loadCategories() {
         new AsyncTask<Void, Void, Cursor>() {
 
             @Override protected void onPreExecute() {
                 if (!progressDialog.isShowing()) {
-                    showDialog(PROGRESS_DIALOG);
+                    final Bundle args = new Bundle();
+                    args.putString(PROGRESS_MESSAGE, "Loading...");
+                    showDialog(PROGRESS_DIALOG, args);
                 }
             }
 
@@ -74,7 +93,6 @@ public final class ManageCategoryActivity extends Activity {
                 if (progressDialog.isShowing()) {
                     dismissDialog(PROGRESS_DIALOG);
                 }
-
             }
         }.execute((Void) null);
     }
@@ -83,6 +101,11 @@ public final class ManageCategoryActivity extends Activity {
         if (progressDialog.isShowing()) {
             removeDialog(PROGRESS_DIALOG);
         }
+
+        if (deletionErrorDialog.isShowing()) {
+            removeDialog(DELETION_ERROR__DIALOG);
+        }
+
         super.onDestroy();
     }
 
@@ -101,6 +124,8 @@ public final class ManageCategoryActivity extends Activity {
                 return createEditCategoryDialog(args);
             case PROGRESS_DIALOG:
                 return progressDialog;
+            case DELETION_ERROR__DIALOG:
+                return deletionErrorDialog;
             default:
                 return super.onCreateDialog(id);
         }
@@ -110,7 +135,6 @@ public final class ManageCategoryActivity extends Activity {
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setTitle("Manage Category");
-        dialog.setMessage("Loading...");
         return dialog;
     }
 
@@ -233,6 +257,9 @@ public final class ManageCategoryActivity extends Activity {
                 text1.setText(args.getString(CATEGORY_EDIT_NAME));
                 text1.setTag(args.getInt(CATEGORY_EDIT_ID));
                 break;
+            case PROGRESS_DIALOG:
+                ((ProgressDialog) dialog).setMessage(args.getString(PROGRESS_MESSAGE));
+                break;
             default: super.onPrepareDialog(id, dialog, args);
         }
     }
@@ -252,7 +279,8 @@ public final class ManageCategoryActivity extends Activity {
                 editItem(cursor);
                 return true;
             case R.id.manage_category_delete_item_context_menu:
-                deleteItem((int) info.id);
+                //deleteItem((int) info.id);
+                deleteItem(10000);
                 return true;
             default: return super.onContextItemSelected(item);
         }
@@ -274,8 +302,31 @@ public final class ManageCategoryActivity extends Activity {
     }
 
     private void deleteItem(final int id) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(WambalContentProvider.Category._ID, id);
-        getContentResolver().delete(Uri.withAppendedPath(WambalContentProvider.Category.CONTENT_URI_SINGLE, ""+id), null, null);
+        new AsyncTask<Void, Void, Integer>() {
+
+            @Override protected void onPreExecute() {
+                if (!progressDialog.isShowing()) {
+                    final Bundle args = new Bundle();
+                    args.putString(PROGRESS_MESSAGE, "Deleting...");
+                    showDialog(PROGRESS_DIALOG, args);
+                }
+            }
+
+            @Override protected Integer doInBackground(final Void... voids) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(WambalContentProvider.Category._ID, id);
+                return getContentResolver().delete(Uri.withAppendedPath(WambalContentProvider.Category.CONTENT_URI_SINGLE, ""+id), null, null);
+            }
+
+            @Override protected void onPostExecute(final Integer count) {
+                if (progressDialog.isShowing()) {
+                    dismissDialog(PROGRESS_DIALOG);
+                }
+
+                if (count < 1) {
+                    showDialog(DELETION_ERROR__DIALOG);
+                }
+            }
+        }.execute((Void) null);
     }
 }
