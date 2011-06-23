@@ -147,18 +147,45 @@ public final class ManageCategoryActivity extends Activity {
 
         final Button okButton = (Button) view.findViewById(R.id.manage_category_dialog_template_ok_button);
         final TextView error = (TextView) view.findViewById(R.id.manage_category_dialog_template_error_text);
+        final EditText text = (EditText) view.findViewById(R.id.manage_category_dialog_template_name);
         error.setText("Please update category name");
         error.setVisibility(View.INVISIBLE);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(final View button) {
-                final EditText text = (EditText) view.findViewById(R.id.manage_category_dialog_template_name);
-                String category = text.getText().toString();
-                if (isUnique(category)) {
-                    updateCategory(category, text.getTag().toString());
-                    dialog.dismiss();
-                } else {
-                    error.setVisibility(View.VISIBLE);
-                }
+                new AsyncTask<String, Void, Boolean>() {
+
+                    @Override protected void onPreExecute() {
+                        button.setClickable(false);
+                        if (!progressDialog.isShowing()) {
+                            final Bundle args = new Bundle();
+                            args.putString(PROGRESS_MESSAGE, "Editing...");
+                            showDialog(PROGRESS_DIALOG, args);
+                        }
+                    }
+
+                    @Override protected Boolean doInBackground(final String... params) {
+                        String category = params[0];
+                        if (isUnique(category)) {
+                            return updateCategory(category, text.getTag().toString()) == 1;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    @Override protected void onPostExecute(final Boolean success) {
+                        if (progressDialog.isShowing()) {
+                            dismissDialog(PROGRESS_DIALOG);
+                        }
+
+                        button.setClickable(true);
+                        if (success) {
+                            dialog.dismiss();
+                        } else {
+                            error.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+                }.execute(text.getText().toString());
             }
         });
         final Button cancelButton = (Button) view.findViewById(R.id.manage_category_dialog_template_cancel_button);
@@ -171,13 +198,14 @@ public final class ManageCategoryActivity extends Activity {
         return dialog;
     }
 
-    private void updateCategory(final String category, final String categoryId) {
+    private int updateCategory(final String category, final String categoryId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(WambalContentProvider.Category.NAME, category);
         try {
-            getContentResolver().update(Uri.withAppendedPath(WambalContentProvider.CONTENT_URI, categoryId), contentValues, null, null);
+            return getContentResolver().update(Uri.withAppendedPath(WambalContentProvider.CONTENT_URI, categoryId), contentValues, null, null);
         } catch (Exception e) {
             Toast.makeText(this, "Could not update category. " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return 0;
         }
     }
 
